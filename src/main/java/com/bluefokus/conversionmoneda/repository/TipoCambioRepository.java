@@ -1,24 +1,14 @@
 package com.bluefokus.conversionmoneda.repository;
 
 import com.bluefokus.conversionmoneda.entity.TipoCambio;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public interface TipoCambioRepository extends JpaRepository<TipoCambio, Integer> {
+public interface TipoCambioRepository extends ReactiveCrudRepository<TipoCambio, Integer> {
 
-    @Query(
-    """
-     SELECT tc FROM TipoCambio tc
-             INNER JOIN tc.monedaOrigen mo
-             INNER JOIN tc.monedaDestino md
-             WHERE tc.fecha = :fecha AND mo.codigo = :codMonedaOrigen AND md.codigo = :codMonedaDestino
-    """)
-    TipoCambio getValorTipoCambio(
-            @Param("fecha") LocalDate fecha,
-            @Param("codMonedaOrigen") String codMonedaOrigen,
-            @Param("codMonedaDestino") String codMonedaDestino);
+    @Query("SELECT t.* FROM tipo_cambio t JOIN moneda mo ON mo.id_moneda = t.id_moneda_origen JOIN moneda md ON md.id_moneda = t.id_moneda_destino WHERE t.fecha = $1 AND mo.codigo = $2 AND md.codigo = $3")
+    Flux<TipoCambio> findValorTipoCambio(LocalDate fecha, String codMonedaOrigen, String codMonedaDestino);
 }

@@ -1,9 +1,10 @@
 package com.bluefokus.conversionmoneda.service;
 
-import com.bluefokus.conversionmoneda.repository.MonedaRepository;
+import com.bluefokus.conversionmoneda.entity.TipoCambio;
 import com.bluefokus.conversionmoneda.repository.TipoCambioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,8 +14,10 @@ import java.time.LocalDate;
 public class TipoCambioService {
 
     private final TipoCambioRepository tipoCambioRepository;
-    private final MonedaRepository monedaRepository;
-    public BigDecimal getValorTipoCambio(String codMonedaOrigen, String codMonedaDestino, LocalDate fecha) {
-        return tipoCambioRepository.getValorTipoCambio(fecha, codMonedaOrigen, codMonedaDestino).getValor();
+
+    public Mono<BigDecimal> getValorTipoCambio(String codMonedaOrigen, String codMonedaDestino, LocalDate fecha) {
+        return tipoCambioRepository.findValorTipoCambio(fecha, codMonedaOrigen, codMonedaDestino)
+                .single()
+                .map(TipoCambio::getValor);
     }
 }

@@ -4,6 +4,7 @@ import com.bluefokus.conversionmoneda.service.TipoCambioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 
@@ -15,11 +16,12 @@ public class TipoCambioController {
     private final TipoCambioService tipoCambioService;
 
     @GetMapping
-    public ResponseEntity<?> search(
+    public Mono<ResponseEntity<?>> search(
             @RequestParam String codMonedaOrigen,
             @RequestParam String codMonedaDestino,
             @RequestParam LocalDate fecha) {
-        return ResponseEntity.ok(tipoCambioService.getValorTipoCambio(codMonedaOrigen, codMonedaDestino, fecha));
+        return tipoCambioService.getValorTipoCambio(codMonedaOrigen, codMonedaDestino, fecha)
+                .map(ResponseEntity::ok);
     }
 
 }

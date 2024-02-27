@@ -1,7 +1,7 @@
 package com.bluefokus.conversionmoneda.repository;
 
 import com.bluefokus.conversionmoneda.entity.Conversion;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-public interface ConversionRepository extends JpaRepository<Conversion, Integer> {
+public interface ConversionRepository extends ReactiveCrudRepository<Conversion, Integer> {
 }

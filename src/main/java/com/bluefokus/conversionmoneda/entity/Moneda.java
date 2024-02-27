@@ -1,22 +1,13 @@
 package com.bluefokus.conversionmoneda.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@Table("moneda")
 public class Moneda {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMoneda;
     private String codigo;
     private String nombre;
